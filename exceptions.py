@@ -1,16 +1,16 @@
-class ResourcePending(Exception):
-    """This is ResourcePending error"""
-    
-    def __init__(self, message='This is ResourcePending error.'):
-        # self.name = 'ResourcePending'
-        self.message = message
-        super().__init__(self.message)
-        
-
 class ResourceFailed(Exception):
-    """This is ResourceFailed error"""
-    
-    def __init__(self, message='This is ResourceFailed error.'):
-        # self.name = 'ResourceFailed'
-        self.message = message
-        super().__init__(self.message)
+    """
+    Error: Failed to create AWS resource.
+    """
+    def __init__(self, status):
+        message = f'Failed to create resource. (Status: {status})'
+        super().__init__(message)
+
+        
+class ResourcePending(Exception):
+    """
+    Error: Resource is being created.
+    """
+    def __init__(self, status):
+        message = f'Resource is still being created. (Status: {status})'
+        super().__init__(message)

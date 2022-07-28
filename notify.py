@@ -7,7 +7,7 @@ def get_message(event):
     if 'statesError' in event.keys():
         return 'Internal error: {}'.format(event['statesError'])
     if 'serviceError' in event.keys():
-        return 'Service error: {}'.format(event['statesError'])
+        return 'Service error: {}'.format(event['serviceError'])
     return 'Your forecasts are available!'
 
 def lambda_handler(event, context):

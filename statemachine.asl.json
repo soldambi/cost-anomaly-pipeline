@@ -46,7 +46,7 @@
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
       },
       "Retry": [
         {
@@ -71,7 +71,7 @@
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
       },
       "Retry": [
         {
@@ -141,7 +141,7 @@
               "OutputPath": "$.Payload",
               "Parameters": {
                 "Payload.$": "$",
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
               },
               "Retry": [
                 {
@@ -210,7 +210,7 @@
               "OutputPath": "$.Payload",
               "Parameters": {
                 "Payload.$": "$",
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
               },
               "Retry": [
                 {
@@ -279,7 +279,7 @@
               "OutputPath": "$.Payload",
               "Parameters": {
                 "Payload.$": "$",
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
               },
               "Retry": [
                 {

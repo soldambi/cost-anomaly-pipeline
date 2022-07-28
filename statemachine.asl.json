@@ -6,22 +6,89 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
         "Payload": {
-          "Step": "PREPROCESS"
+          "time.$": "$.time",
+          "step": "PREPROCESS"
         }
       },
       "Retry": [
         {
           "ErrorEquals": [
+            "ResourcePending"
+          ],
+          "IntervalSeconds": 300,
+          "MaxAttempts": 12,
+          "BackoffRate": 1
+        }
+      ],
+      "Next": "Parallel",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "ResourceFailed"
+          ],
+          "Next": "Notify-Failure",
+          "ResultPath": "$.serviceError"
+        },
+        {
+          "ErrorEquals": [
             "States.ALL"
+          ],
+          "ResultPath": "$.statesError",
+          "Next": "Notify-Failure"
+        }
+      ]
+    },
+    "Notify-Failure": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
           ],
           "IntervalSeconds": 2,
           "MaxAttempts": 6,
           "BackoffRate": 2
         }
       ],
-      "Next": "Parallel"
+      "Next": "Fail"
+    },
+    "Fail": {
+      "Type": "Fail"
+    },
+    "Notify-Success": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Success"
+    },
+    "Success": {
+      "Type": "Succeed"
     },
     "Parallel": {
       "Type": "Parallel",
@@ -33,22 +100,64 @@
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
               "Parameters": {
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
                 "Payload": {
-                  "Step": "MODEL-ARIMA"
+                  "time.$": "$.time",
+                  "step": "MODEL-ARIMA"
                 }
               },
               "Retry": [
                 {
                   "ErrorEquals": [
+                    "ResourcePending"
+                  ],
+                  "IntervalSeconds": 300,
+                  "MaxAttempts": 12,
+                  "BackoffRate": 1
+                }
+              ],
+              "Catch": [
+                {
+                  "ErrorEquals": [
+                    "ResourceFailed"
+                  ],
+                  "Next": "Notify-Failure-ARIMA",
+                  "ResultPath": "$.serviceError"
+                },
+                {
+                  "ErrorEquals": [
                     "States.ALL"
+                  ],
+                  "ResultPath": "$.statesError",
+                  "Next": "Notify-Failure-ARIMA"
+                }
+              ],
+              "End": true
+            },
+            "Notify-Failure-ARIMA": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException"
                   ],
                   "IntervalSeconds": 2,
                   "MaxAttempts": 6,
                   "BackoffRate": 2
                 }
               ],
-              "End": true
+              "Next": "Fail (1)"
+            },
+            "Fail (1)": {
+              "Type": "Fail"
             }
           }
         },
@@ -59,74 +168,175 @@
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
               "Parameters": {
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
                 "Payload": {
-                  "Step": "MODEL-ETS"
+                  "time.$": "$.time",
+                  "step": "MODEL-ETS"
                 }
               },
               "Retry": [
                 {
                   "ErrorEquals": [
+                    "ResourcePending"
+                  ],
+                  "IntervalSeconds": 300,
+                  "MaxAttempts": 12,
+                  "BackoffRate": 1
+                }
+              ],
+              "Catch": [
+                {
+                  "ErrorEquals": [
+                    "ResourceFailed"
+                  ],
+                  "Next": "Notify-Failure-ETS",
+                  "ResultPath": "$.serviceError"
+                },
+                {
+                  "ErrorEquals": [
                     "States.ALL"
+                  ],
+                  "Next": "Notify-Failure-ETS",
+                  "ResultPath": "$.statesError"
+                }
+              ],
+              "End": true
+            },
+            "Notify-Failure-ETS": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException"
                   ],
                   "IntervalSeconds": 2,
                   "MaxAttempts": 6,
                   "BackoffRate": 2
                 }
               ],
-              "End": true
+              "Next": "Fail (2)"
+            },
+            "Fail (2)": {
+              "Type": "Fail"
             }
           }
         },
         {
-          "StartAt": "PCA",
+          "StartAt": "PCR",
           "States": {
-            "PCA": {
+            "PCR": {
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
               "Parameters": {
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
                 "Payload": {
-                  "Step": "MODEL-PCA"
+                  "time.$": "$.time",
+                  "step": "MODEL-PCR"
                 }
               },
               "Retry": [
                 {
                   "ErrorEquals": [
+                    "ResourcePending"
+                  ],
+                  "IntervalSeconds": 300,
+                  "MaxAttempts": 12,
+                  "BackoffRate": 1
+                }
+              ],
+              "End": true,
+              "Catch": [
+                {
+                  "ErrorEquals": [
+                    "ResourceFailed"
+                  ],
+                  "ResultPath": "$.serviceError",
+                  "Next": "Notify-Failure-ETS (1)"
+                },
+                {
+                  "ErrorEquals": [
                     "States.ALL"
+                  ],
+                  "Next": "Notify-Failure-ETS (1)",
+                  "ResultPath": "$.serviceError"
+                }
+              ]
+            },
+            "Notify-Failure-ETS (1)": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "OutputPath": "$.Payload",
+              "Parameters": {
+                "Payload.$": "$",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:stack-cost-anomaly-stepfunction-demo-t-NotifyTopic-fUlRXkGiybAj:$LATEST"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "Lambda.ServiceException",
+                    "Lambda.AWSLambdaException",
+                    "Lambda.SdkClientException"
                   ],
                   "IntervalSeconds": 2,
                   "MaxAttempts": 6,
                   "BackoffRate": 2
                 }
               ],
-              "End": true
+              "Next": "Fail (3)"
+            },
+            "Fail (3)": {
+              "Type": "Fail"
             }
           }
         }
       ],
-      "Next": "PCR"
+      "Next": "PCA"
     },
-    "PCR": {
+    "PCA": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
         "Payload": {
-          "Step": "MODEL-PCR"
+          "time.$": "$.time",
+          "step": "MODEL-PCA"
         }
       },
       "Retry": [
         {
           "ErrorEquals": [
-            "States.ALL"
+            "ResourcePending"
           ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 6,
-          "BackoffRate": 2
+          "IntervalSeconds": 300,
+          "MaxAttempts": 12,
+          "BackoffRate": 1
         }
       ],
-      "End": true
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "ResourceFailed"
+          ],
+          "Next": "Notify-Failure",
+          "ResultPath": "$.serviceError"
+        },
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "Notify-Failure",
+          "ResultPath": "$.statesError"
+        }
+      ],
+      "Next": "Notify-Success"
     }
   }
 }

@@ -339,7 +339,8 @@
           "ResultPath": "$.statesError"
         }
       ],
-      "Next": "Notify-Success"
+      "Next": "Notify-Success",
+      "InputPath": "$[0].Payload"
     }
   }
 }

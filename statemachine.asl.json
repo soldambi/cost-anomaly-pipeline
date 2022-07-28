@@ -132,7 +132,8 @@
                   "Next": "Notify-Failure-ARIMA"
                 }
               ],
-              "End": true
+              "End": true,
+              "InputPath": "$.Payload"
             },
             "Notify-Failure-ARIMA": {
               "Type": "Task",
@@ -200,7 +201,8 @@
                   "ResultPath": "$.statesError"
                 }
               ],
-              "End": true
+              "End": true,
+              "InputPath": "$.Payload"
             },
             "Notify-Failure-ETS": {
               "Type": "Task",
@@ -268,7 +270,8 @@
                   "Next": "Notify-Failure-ETS (1)",
                   "ResultPath": "$.serviceError"
                 }
-              ]
+              ],
+              "InputPath": "$.Payload"
             },
             "Notify-Failure-ETS (1)": {
               "Type": "Task",

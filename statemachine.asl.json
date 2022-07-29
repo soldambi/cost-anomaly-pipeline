@@ -6,7 +6,7 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
         "Payload": {
           "time.$": "$.time",
           "step": "PREPROCESS"
@@ -46,7 +46,7 @@
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
       },
       "Retry": [
         {
@@ -71,7 +71,7 @@
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
       },
       "Retry": [
         {
@@ -100,7 +100,7 @@
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
               "Parameters": {
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
                 "Payload": {
                   "time.$": "$.time",
                   "step": "MODEL-ARIMA"
@@ -111,7 +111,7 @@
                   "ErrorEquals": [
                     "ResourcePending"
                   ],
-                  "IntervalSeconds": 300,
+                  "IntervalSeconds": 600,
                   "MaxAttempts": 12,
                   "BackoffRate": 1
                 }
@@ -141,7 +141,7 @@
               "OutputPath": "$.Payload",
               "Parameters": {
                 "Payload.$": "$",
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
               },
               "Retry": [
                 {
@@ -169,7 +169,7 @@
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
               "Parameters": {
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
                 "Payload": {
                   "time.$": "$.time",
                   "step": "MODEL-ETS"
@@ -210,7 +210,7 @@
               "OutputPath": "$.Payload",
               "Parameters": {
                 "Payload.$": "$",
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
               },
               "Retry": [
                 {
@@ -238,7 +238,7 @@
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
               "Parameters": {
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
                 "Payload": {
                   "time.$": "$.time",
                   "step": "MODEL-PCR"
@@ -279,7 +279,7 @@
               "OutputPath": "$.Payload",
               "Parameters": {
                 "Payload.$": "$",
-                "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
+                "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-NOTIFY:$LATEST"
               },
               "Retry": [
                 {
@@ -301,13 +301,18 @@
           }
         }
       ],
-      "Next": "PCA"
+      "Next": "PCA",
+      "ResultSelector": {
+        "ARIMA.$": "$[0].Payload",
+        "ETS.$": "$[1].Payload",
+        "PCR.$": "$[2].Payload"
+      }
     },
     "PCA": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "arn:aws:lambda:ap-northeast-2:370166107047:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:000000000000:function:LAMBDA-COST-ANOMALY-RUN-BATCH-JOB:$LATEST",
         "Payload": {
           "time.$": "$.time",
           "step": "MODEL-PCA"
@@ -340,7 +345,7 @@
         }
       ],
       "Next": "Notify-Success",
-      "InputPath": "$[0].Payload"
+      "InputPath": "$.ARIMA"
     }
   }
 }

@@ -261,19 +261,19 @@
                     "ResourceFailed"
                   ],
                   "ResultPath": "$.serviceError",
-                  "Next": "Notify-Failure-ETS (1)"
+                  "Next": "Notify-Failure-PCR"
                 },
                 {
                   "ErrorEquals": [
                     "States.ALL"
                   ],
-                  "Next": "Notify-Failure-ETS (1)",
+                  "Next": "Notify-Failure-PCR",
                   "ResultPath": "$.serviceError"
                 }
               ],
               "InputPath": "$.Payload"
             },
-            "Notify-Failure-ETS (1)": {
+            "Notify-Failure-PCR": {
               "Type": "Task",
               "Resource": "arn:aws:states:::lambda:invoke",
               "OutputPath": "$.Payload",

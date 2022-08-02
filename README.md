@@ -8,4 +8,4 @@ with step function, lambda, batch
 ## ver2. SNS, error handling machine
 - Not waiting inside lambda, but retry every 5 mins up to 12 times (1 hour) by state machine if ResourcePending error.
 - If else error, call SNS and send email with error message.
-<img width="892" alt="Screen Shot 2022-07-28 at 9 49 50 AM" src="https://user-images.githubusercontent.com/57607047/181397236-d73e6062-bedc-483d-8eec-662cb1576728.png">
+<img width="916" alt="Screen Shot 2022-08-02 at 11 51 11 AM" src="https://user-images.githubusercontent.com/57607047/182282293-b13a49d4-24c9-473d-a289-a435677aa6cd.png">

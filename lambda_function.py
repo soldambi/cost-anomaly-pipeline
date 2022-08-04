@@ -1,4 +1,5 @@
 from exceptions import *
+from datetime import datetime, timedelta
 
 import json
 import boto3
@@ -14,9 +15,14 @@ jobDefinition = 'JD-DEV-COST-ANOMALY-{step}'
 def lambda_handler(event, context):
 
     step = event['step']
-    date = event['time'].replace(':', '-')
-
     print(f'This step is {step} step.')
+
+    date = event['time'].replace(':', '-')
+    if date[-1] == 'Z':
+        utc_datetime_obj = datetime.strptime(date, '%Y-%m-%dT%H-%M-%SZ')
+        kst_datetime_obj = utc_datetime_obj + timedelta(hours=9)
+        date = datetime.strftime(kst_datetime_obj, '%Y-%m-%dT%H-%M-%SK')
+
     list_jobs_response = batch.list_jobs(
         jobQueue=jobQueue,
         filters=[
@@ -44,6 +50,7 @@ def lambda_handler(event, context):
     print(f'Status: {status}')
     if status == 'SUCCEEDED':
         event['status'] = status
+        event['time'] = date
         return event
     elif status == 'FAILED':
         raise ResourceFailed(status)

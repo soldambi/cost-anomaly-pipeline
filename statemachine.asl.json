@@ -268,7 +268,7 @@
                     "States.ALL"
                   ],
                   "Next": "Notify-Failure-PCR",
-                  "ResultPath": "$.serviceError"
+                  "ResultPath": "$.statesError"
                 }
               ],
               "InputPath": "$.Payload"

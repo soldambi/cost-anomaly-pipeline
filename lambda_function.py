@@ -53,6 +53,6 @@ def lambda_handler(event, context):
         event['time'] = date
         return event
     elif status == 'FAILED':
-        raise ResourceFailed(status)
+        raise ResourceFailed(step, status)
     else:
-        raise ResourcePending(status)
+        raise ResourcePending(step, status)

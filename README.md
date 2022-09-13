@@ -1,5 +1,5 @@
 # Cost Anomaly Pipeline
-with step function, lambda, batch
+<img width="581" alt="Screen Shot 2022-09-13 at 10 00 03 PM" src="https://user-images.githubusercontent.com/57607047/189907707-55d0f2f0-fe7c-45cb-8d9f-4d80c38fe9f9.png">
 
 ## ver1. Simple State Machine
 - Each step waits 10 minutes inside the lambda function, and retry 6 times by state machine.

@@ -1,5 +1,7 @@
 # Cost Anomaly Pipeline
+## Pipeline Architecture
 <img width="581" alt="Screen Shot 2022-09-13 at 10 00 03 PM" src="https://user-images.githubusercontent.com/57607047/189907707-55d0f2f0-fe7c-45cb-8d9f-4d80c38fe9f9.png">
+
 - 사용된 AWS 서비스
   - Step Function: 워크플로우를 구성하고 관리하는 용도
   - Lambda: 워크플로우의 각 스텝(step)이면서, Batch와 SNS에 요청을 보내는 용도
